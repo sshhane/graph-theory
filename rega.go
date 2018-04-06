@@ -84,8 +84,10 @@ func pomatch(po string, s string) bool {
 	ponfa := poregtonfa(po)
 
 	// lists of states
-	current := []*state{}
+	current := []*state{ponfa.initial}
 	next := []*state{}
+
+	current = addState(current[:], ponfa.initial, ponfa.accept)
 
 	// generate next from current
 	for _, r := range s {
@@ -93,19 +95,33 @@ func pomatch(po string, s string) bool {
 			// check if labeled
 			if c.symbol == r {
 				// add c state to array
+				next = addState(next[:], s.edge1)
 			}
 		}
 		// set current to next
 		current, next = next, []*state{}
 	}
 
-	// llop and check if accept state
+	// loop and check if accept state
 	for _, c := range current {
 		if c == ponfa.accept {
 			ismatch = true
 		}
 	}
 	return ismatch
+}
+
+func addState(l []*state, s *state, a *state) []*state {
+	l = append(l, s)
+
+	if s.symbol == 0 {
+		l = addState(l, s.edge1, a)
+		if s.edge2 != nil {
+			l = addState(l, s.edge2, a)
+		}
+	}
+
+	return l
 }
 
 func main() {
