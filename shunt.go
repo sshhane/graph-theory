@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 func intopost(infix string) string {
 	specials := map[rune]int{'*': 10, '.': 9, '|': 8}
 	postfix, s := []rune{}, []rune{}
@@ -35,19 +39,38 @@ func intopost(infix string) string {
 	return string(postfix)
 }
 
+func main() {
+
+	//ab.c*
+	fmt.Println("infix:  ", "a.b.c*")
+	fmt.Println("postfix:  ", intopost("a.b.c*"))
+	//abd|*
+	fmt.Println("infix:  ", "(a.(b|d))*")
+	fmt.Println("postfix:  ", intopost("(a.(b|d))*"))
+	//abd|.c*
+	fmt.Println("infix:  ", "a.(b|d).c*")
+	fmt.Println("postfix:  ", intopost("a.(b|d).c*"))
+	//abb.+.c.
+	fmt.Println("infix:  ", "a.(b.b)+.c")
+	fmt.Println("postfix:  ", intopost("a.(b.b)+.c"))
+
+}
+
+// type nfa struct {
+//     // ...
+// }
+
+// func regexcompile(r string) nfa {
+//     // ...
+//     return n
+// }
+
+// func (n nfa) regexmatch(n nfa, r sting) bool {
+//     // ...
+//     return ismatch
+// }
 // func main() {
-
-// 	//ab.c*
-// 	fmt.Println("infix:  ", "a.b.c*")
-// 	fmt.Println("postfix:  ", intopost("a.b.c*"))
-// 	//abd|*
-// 	fmt.Println("infix:  ", "(a.(b|d))*")
-// 	fmt.Println("postfix:  ", intopost("(a.(b|d))*"))
-// 	//abd|.c*
-// 	fmt.Println("infix:  ", "a.(b|d).c*")
-// 	fmt.Println("postfix:  ", intopost("a.(b|d).c*"))
-// 	//abb.+.c.
-// 	fmt.Println("infix:  ", "a.(b.b)+.c")
-// 	fmt.Println("postfix:  ", intopost("a.(b.b)+.c"))
-
+//     n := regexcompile("01*0")
+//     t := n.regexmatch("01110")
+//     f := n.regexmatch("1000001")
 // }
