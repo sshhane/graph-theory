@@ -87,8 +87,10 @@ func pomatch(po string, s string) bool {
 	current := []*state{}
 	next := []*state{}
 
+	// generate next from current
 	for _, r := range s {
 		for _, c := range current {
+			// check if labeled
 			if c.symbol == r {
 				// add c state to array
 			}
@@ -97,6 +99,7 @@ func pomatch(po string, s string) bool {
 		current, next = next, []*state{}
 	}
 
+	// llop and check if accept state
 	for _, c := range current {
 		if c == ponfa.accept {
 			ismatch = true
