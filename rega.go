@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type state struct {
@@ -156,13 +157,21 @@ func addState(l []*state, s *state, a *state) []*state {
 	return l
 }
 
+// reader func
+func reader() (string, error) {
+	reader := bufio.NewReader(os.Stdin)
+	s, err := reader.ReadString('\n')
+
+	return strings.TrimSpace(s), err
+}
+
 func main() {
 	// test
-	fmt.Println(pomatch("ab.c*|", "cccc"))
+	// fmt.Println(pomatch("ab.c*|", "cccc"))
 
 	input := 0
 	// read input
-	reader := bufio.NewReader(os.Stdin)
+	// reader := bufio.NewReader(os.Stdin)
 
 	fmt.Println("Infix / Postfix expression to NFA conversion\n===================")
 	// ask for Infix or Postfix
@@ -174,24 +183,33 @@ func main() {
 	case 1:
 
 		fmt.Println("Enter Infix expression: ")
-		expression, _ := reader.ReadString('\n')
-		fmt.Println(expression)
+		// expression, _ := reader.ReadString('\n')
+		expression, err := reader()
+
+		// errors
+		if err != nil {
+			return
+		}
 
 		fmt.Println("Enter string to test: ")
-		str, _ := reader.ReadString('\n')
+		// str, _ := reader.ReadString('\n')
+		str, err := reader()
 
-		fmt.Println(expression, str)
+		fmt.Print(expression, str)
 
 		fmt.Println("String", str, " matches nfa: ", pomatch(expression, str))
 
 	case 2:
-		fmt.Println("Enter Postfix expression: ")
-		expression, _ := reader.ReadString('\n')
 
-		fmt.Println("Enter string to test: ")
-		str, _ := reader.ReadString('\n')
+		// fmt.Println("Enter Postfix expression: ")
+		// expression, _ := reader.ReadString('\n')
 
-		fmt.Println("String", str, " matches nfa: ", pomatch(expression, str))
+		// fmt.Println("Enter string to test: ")
+		// str, _ := reader.ReadString('\n')
+
+		// fmt.Print(expression, str)
+
+		// fmt.Println("String", str, " matches nfa: ", pomatch(expression, str))
 
 	default:
 		fmt.Println("Invalid response!\nPlease enter one of the above: ")
