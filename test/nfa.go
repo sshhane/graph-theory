@@ -31,6 +31,7 @@ func poregtonfa(posfix string) *nfa {
 			frag1.accept.edge1 = frag2.initial
 
 			nfastack = append(nfastack, &nfa{initial: frag1.initial, accept: frag2.accept}) // frag2 accept state is accept state of new fragment
+
 		case '|':
 			frag2 := nfastack[len(nfastack)-1]
 			nfastack = nfastack[:len(nfastack)-1]
@@ -46,6 +47,10 @@ func poregtonfa(posfix string) *nfa {
 			frag2.accept.edge1 = &accept
 
 			nfastack = append(nfastack, &nfa{initial: frag1.initial, accept: frag2.accept})
+
+			////
+			fmt.Println(" ", initial)
+
 		case '*':
 			// pop one frag off stack
 			frag := nfastack[len(nfastack)-1]
@@ -61,12 +66,18 @@ func poregtonfa(posfix string) *nfa {
 			// old frag with new accept and initial states
 			nfastack = append(nfastack, &nfa{initial: &accept, accept: &accept})
 
+			////
+			fmt.Println(" ", initial)
+
 		default:
 			accept := state{}
 			initial := state{symbol: r, edge1: &accept}
 
 			// push to stack
 			nfastack = append(nfastack, &nfa{initial: &accept, accept: &accept})
+
+			////
+			fmt.Println(" ", initial)
 
 		}
 	}

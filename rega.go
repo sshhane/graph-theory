@@ -46,6 +46,10 @@ func poregtonfa(posfix string) *nfa {
 			frag2.accept.edge1 = &accept
 
 			nfastack = append(nfastack, &nfa{initial: frag1.initial, accept: frag2.accept})
+
+			////
+			fmt.Println(" ", initial)
+
 		case '*':
 			// pop one frag off stack
 			frag := nfastack[len(nfastack)-1]
@@ -61,12 +65,17 @@ func poregtonfa(posfix string) *nfa {
 			// old frag with new accept and initial states
 			nfastack = append(nfastack, &nfa{initial: &accept, accept: &accept})
 
+			////
+			fmt.Println(" ", initial)
+
 		default:
 			accept := state{}
 			initial := state{symbol: r, edge1: &accept}
 
 			// push to stack
 			nfastack = append(nfastack, &nfa{initial: &accept, accept: &accept})
+			////
+			fmt.Println(" ", initial)
 
 		}
 	}
@@ -87,6 +96,7 @@ func pomatch(po string, s string) bool {
 	current := []*state{ponfa.initial}
 	next := []*state{}
 
+	// add initial state of postfix nfa to current array
 	current = addState(current[:], ponfa.initial, ponfa.accept)
 
 	// generate next from current
@@ -95,7 +105,7 @@ func pomatch(po string, s string) bool {
 			// check if labeled
 			if c.symbol == r {
 				// add c state to array
-				next = addState(next[:], s.edge1)
+				next = addState(next[:], c.edge1, ponfa.accept)
 			}
 		}
 		// set current to next
@@ -114,9 +124,9 @@ func pomatch(po string, s string) bool {
 func addState(l []*state, s *state, a *state) []*state {
 	l = append(l, s)
 
-	if s.symbol == 0 {
+	if s != a && s.symbol == 0 { // not in accept state
 		l = addState(l, s.edge1, a)
-		if s.edge2 != nil {
+		if s.edge2 != nil { // if there is second edge
 			l = addState(l, s.edge2, a)
 		}
 	}
