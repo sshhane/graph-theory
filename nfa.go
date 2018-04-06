@@ -45,6 +45,17 @@ func poregtonfa(posfix string) *nfa {
 			nfastack = append(nfastack, &nfa{initial: frag1.initial, accept: frag2.accept})
 		case '*':
 
+			frag := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+
+			accept := state{}
+			initial := state{edge1: frag.initial, edge2: &accept}
+
+			frag.accept.edge1 = frag.initial
+			frag.accept.edge2 = &accept
+
+			nfastack = append(nfastack, &nfa{initial: &accept, accept: &accept})
+
 		default:
 			accept := state{}
 			initial := state{symbol: r, edge1: &accept}
