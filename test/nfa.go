@@ -15,28 +15,28 @@ type nfa struct {
 	accept  *state
 }
 
-func poregtonfa(posfix string) *nfa {
-	nfastack := []*nfa{}
+func postRegexNfa(posfix string) *nfa {
+	nfaStack := []*nfa{}
 
 	for _, r := range posfix {
 		switch r {
 		case '.':
 			// first is at bottom
-			frag2 := nfastack[len(nfastack)-1] // pop last off stack
-			nfastack = nfastack[:len(nfastack)-1]
-			frag1 := nfastack[len(nfastack)-1]
-			nfastack = nfastack[:len(nfastack)-1]
+			frag2 := nfaStack[len(nfaStack)-1] // pop last off stack
+			nfaStack = nfaStack[:len(nfaStack)-1]
+			frag1 := nfaStack[len(nfaStack)-1]
+			nfaStack = nfaStack[:len(nfaStack)-1]
 
 			// concat accept state of first to initial of second
 			frag1.accept.edge1 = frag2.initial
 
-			nfastack = append(nfastack, &nfa{initial: frag1.initial, accept: frag2.accept}) // frag2 accept state is accept state of new fragment
+			nfaStack = append(nfaStack, &nfa{initial: frag1.initial, accept: frag2.accept}) // frag2 accept state is accept state of new fragment
 
 		case '|':
-			frag2 := nfastack[len(nfastack)-1]
-			nfastack = nfastack[:len(nfastack)-1]
-			frag1 := nfastack[len(nfastack)-1]
-			nfastack = nfastack[:len(nfastack)-1]
+			frag2 := nfaStack[len(nfaStack)-1]
+			nfaStack = nfaStack[:len(nfaStack)-1]
+			frag1 := nfaStack[len(nfaStack)-1]
+			nfaStack = nfaStack[:len(nfaStack)-1]
 
 			// new initial state
 			initial := state{edge1: frag1.initial, edge2: frag2.initial}
@@ -46,15 +46,12 @@ func poregtonfa(posfix string) *nfa {
 			frag1.accept.edge1 = &accept
 			frag2.accept.edge1 = &accept
 
-			nfastack = append(nfastack, &nfa{initial: frag1.initial, accept: frag2.accept})
-
-			////
-			fmt.Println(" ", initial)
+			nfaStack = append(nfaStack, &nfa{initial: &initial, accept: &accept})
 
 		case '*':
 			// pop one frag off stack
-			frag := nfastack[len(nfastack)-1]
-			nfastack = nfastack[:len(nfastack)-1]
+			frag := nfaStack[len(nfaStack)-1]
+			nfaStack = nfaStack[:len(nfaStack)-1]
 
 			accept := state{}
 			initial := state{edge1: frag.initial, edge2: &accept}
@@ -64,28 +61,22 @@ func poregtonfa(posfix string) *nfa {
 
 			// push new frag
 			// old frag with new accept and initial states
-			nfastack = append(nfastack, &nfa{initial: &accept, accept: &accept})
-
-			////
-			fmt.Println(" ", initial)
+			nfaStack = append(nfaStack, &nfa{initial: &accept, accept: &accept})
 
 		default:
 			accept := state{}
 			initial := state{symbol: r, edge1: &accept}
 
 			// push to stack
-			nfastack = append(nfastack, &nfa{initial: &accept, accept: &accept})
-
-			////
-			fmt.Println(" ", initial)
+			nfaStack = append(nfaStack, &nfa{initial: &accept, accept: &accept})
 
 		}
 	}
 
-	return nfastack[0]
+	return nfaStack[0]
 }
 
 func main() {
-	nfa := poregtonfa("ab.c*|")
+	nfa := postRegexNfa("ab.c*|")
 	fmt.Println(nfa)
 }
