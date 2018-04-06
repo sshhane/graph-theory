@@ -195,21 +195,27 @@ func main() {
 		// str, _ := reader.ReadString('\n')
 		str, err := reader()
 
-		fmt.Print(expression, str)
+		// intoPost
+		expression = intoPost(expression)
 
 		fmt.Println("String", str, " matches nfa: ", pomatch(expression, str))
 
 	case 2:
 
-		// fmt.Println("Enter Postfix expression: ")
+		fmt.Println("Enter Postfix expression: ")
 		// expression, _ := reader.ReadString('\n')
+		expression, err := reader()
 
-		// fmt.Println("Enter string to test: ")
+		// errors
+		if err != nil {
+			return
+		}
+
+		fmt.Println("Enter string to test: ")
 		// str, _ := reader.ReadString('\n')
+		str, err := reader()
 
-		// fmt.Print(expression, str)
-
-		// fmt.Println("String", str, " matches nfa: ", pomatch(expression, str))
+		fmt.Println("String", str, " matches nfa: ", pomatch(expression, str))
 
 	default:
 		fmt.Println("Invalid response!\nPlease enter one of the above: ")
