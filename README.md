@@ -1,6 +1,8 @@
 # graph-theory
 Go program to build a non-deterministic finite automiton from a regular expression, can use this NFA to check if regex matches a given string
 
+The program accepts either an Infix or Postfix expression.  If it is infix the expression is converted to postfix first and the string entered is checked against the postfix expression.  A response of true or false is then output to the console.
+
 ## Running the code
 To run the code in this repository, the files must first be compiled.
 The [Go compiler](https://golang.org/dl/) must first be installed on your machine.
@@ -24,11 +26,35 @@ Once that is installed, the code can be compiled and run by following these step
 
 The [Go compiler](https://golang.org/dl/) must first be installed on your machine.
 
+
+## Sample output
+```
+Infix / Postfix expression to NFA conversion
+===================
+Enter:
+1) for Infix
+2) for Postfix
+1
+Enter Infix expression:
+a.b.c
+Enter string to test:
+abc
+String abc  matches nfa:  true
 ```
 
 ```
-
-## Running the tests
+Infix / Postfix expression to NFA conversion
+===================
+Enter:
+1) for Infix
+2) for Postfix
+2
+Enter Postfix expression:
+ab.c
+Enter string to test:
+sss
+String sss  matches nfa:  false
+```
 
 
 ## Acknowledgments
