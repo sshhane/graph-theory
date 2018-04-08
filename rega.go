@@ -19,7 +19,8 @@ type nfa struct {
 }
 
 func intoPost(infix string) string {
-	specials := map[rune]int{'*': 10, '.': 9, '|': 8}
+	// map special characters by priority
+	specials := map[rune]int{'*': 7, '.': 9, '|': 8, '+': 10}
 	postfix, s := []rune{}, []rune{}
 
 	for _, r := range infix {
@@ -36,6 +37,12 @@ func intoPost(infix string) string {
 			s = s[:len(s)-1]
 
 		case specials[r] > 0:
+			for len(s) > 0 && specials[r] <= specials[s[len(s)-1]] {
+				postfix, s = append(postfix, s[len(s)-1]), s[:len(s)-1]
+			}
+			s = append(s, r)
+
+		case specials[r] > 1:
 			for len(s) > 0 && specials[r] <= specials[s[len(s)-1]] {
 				postfix, s = append(postfix, s[len(s)-1]), s[:len(s)-1]
 			}
@@ -100,6 +107,23 @@ func postRegexNfa(posfix string) *nfa {
 			// push new frag
 			// old frag with new accept and initial states
 			nfaStack = append(nfaStack, &nfa{initial: &initial, accept: &accept})
+
+		case '+':
+			// pop one frag off stack
+			frag := nfaStack[len(nfaStack)-1]
+			nfaStack = nfaStack[:len(nfaStack)-1]
+
+			accept := state{}
+			initial := state{edge1: frag.initial, edge2: &accept}
+
+			frag.accept.edge1 = &initial
+
+			// frag.accept.edge1 = frag.initial
+			// frag.accept.edge2 = &accept
+
+			// push new frag
+			// old frag with new accept and initial states
+			nfaStack = append(nfaStack, &nfa{initial: frag.initial, accept: &accept})
 
 		default:
 			accept := state{}
