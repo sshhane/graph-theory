@@ -3,6 +3,8 @@ Go program to build a non-deterministic finite automiton from a regular expressi
 
 The program accepts either an Infix or Postfix expression.  If it is infix the expression is converted to postfix first and the string entered is checked against the postfix expression.  A response of true or false is then output to the console.
 
+Capable of dealing with the '*', '.', '|' and '+' special characters
+
 ## Running the code
 To run the code in this repository, the files must first be compiled.
 The [Go compiler](https://golang.org/dl/) must first be installed on your machine.
@@ -26,8 +28,8 @@ Once that is installed, the code can be compiled and run by following these step
 
 The [Go compiler](https://golang.org/dl/) must first be installed on your machine.
 
-
 ## Sample output
+
 ```
 Infix / Postfix expression to NFA conversion
 ===================
@@ -54,6 +56,20 @@ ab.c
 Enter string to test:
 sss
 String sss  matches nfa:  false
+```
+
+```
+Infix / Postfix expression to NFA conversion
+===================
+Enter:
+1) for Infix
+2) for Postfix
+2
+Enter Postfix expression:
+a+b.
+Enter string to test:
+aaaaab
+String aaaaab  matches nfa:  true
 ```
 
 
